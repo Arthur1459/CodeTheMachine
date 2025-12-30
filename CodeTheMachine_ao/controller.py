@@ -1,5 +1,5 @@
 import CodeTheMachine_ao.machine as mc
-import CodeTheMachine_ao.machine as machine # used in controller
+import CodeTheMachine_ao.machine as machine # used by user
 import CodeTheMachine_ao.main_simulator as m
 import CodeTheMachine_ao.levels_manager as lvls
 import CodeTheMachine_ao.vars as _vr
@@ -7,7 +7,9 @@ import CodeTheMachine_ao.vector as vector
 import CodeTheMachine_ao.config as config
 import CodeTheMachine_ao.utils as u
 import CodeTheMachine_ao.GUI as GUI
-import CodeTheMachine_ao.tools as tools # may be used in controller
+import CodeTheMachine_ao.tools as tools # may be used by user
+from CodeTheMachine_ao.collectable import Collectable, Orb, Energy, Timer
+from CodeTheMachine_ao.collider import Wall
 
 from CodeTheMachine_ao.vector import Vector
 
@@ -68,7 +70,7 @@ def getEnvironmentSize() -> vector.Vector: return vector.Vector(config.window_x_
 def distanceFromGround(y_position):
     return config.window_y_size - lvls.getGroundHeight() - y_position
 
-def addSlider(label, low, high, value_init, position: Vector, vertical=False, length=150):
+def addSlider(label, low, high, value_init, position, vertical=False, length=150):
     """
     Add a slider for the user to control the value of variables.
     :param label: Name displayed (string)
@@ -79,6 +81,27 @@ def addSlider(label, low, high, value_init, position: Vector, vertical=False, le
     :param vertical: (Optional) to have a vertical slider (bool) (False by default)
     :return: Slider object (read value with Slider.getValue())
     """
+    if not isinstance(position, Vector): position = Vector(*position)
     slider = GUI.Slider(label, low, high, position, length, min(1, max(0, (value_init - low) / (high - low))), vertical=vertical)
     _vr.gui.append(slider)
     return slider
+
+def addCollectable(c):
+    if isinstance(c, Collectable):
+        _vr.collectables.append(c)
+    else:
+        print("Error : object is not collectable.")
+
+def addWall(w):
+    if isinstance(w, Wall):
+        _vr.colliders.append(w)
+    else:
+        print("Error : object is not a wall.")
+
+def setEnergyLoss(value):
+    """
+    factor of the amount of energy lost each update in %
+    :param value: in %
+    :return: None
+    """
+    _vr.energy_loss = 0.01 * value * config.base_energy_loss

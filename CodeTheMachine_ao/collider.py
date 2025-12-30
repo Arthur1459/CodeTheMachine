@@ -47,11 +47,11 @@ class Circle(CircleComposedCollider):
 
 
 class Wall(CircleComposedCollider):
-    def __init__(self, start: v.Vector, end: v.Vector, width: int | float):
+    def __init__(self, start, end, width: int | float):
         super().__init__()
 
-        self.start = start
-        self.end = end
+        self.start = start if isinstance(start, v.Vector) else v.Vector(*start)
+        self.end = end if isinstance(end, v.Vector) else v.Vector(*end)
         self.width = width
 
         self.set_colliders()

@@ -99,8 +99,11 @@ class DroneLvlManager(AbstractLvlManager):
     def load_lvl(level=None) -> bool:
         global segment_index
         segment_index = -1
-        vr.colliders = []
-        vr.collectables = []
+
+        if level is not None:
+            vr.colliders = []
+            vr.collectables = []
+            vr.energy_loss = 0
 
         if level == 0:
             pass
@@ -151,7 +154,7 @@ class DroneLvlManager(AbstractLvlManager):
             vr.collectables.append(collect.Energy(v.Vector(525, 250)))
 
         elif level is None:
-            vr.energy_loss = 0
+            pass
         else:
             raise AttributeError(f"Error : level {level} does not exist.")
 
@@ -245,8 +248,12 @@ class CarLvlManager(AbstractLvlManager):
         global segment_index
         segment_index = -1
         vr.energy_loss = 0.1 * cf.base_energy_loss
-        if level is None: return True
-        elif level == 0:
+
+        if level is not None:
+            vr.colliders = []
+            vr.collectables = []
+
+        if level == 0:
             vr.colliders.append(collide.Wall(Vector(300, 250), Vector(600, 250), 20))
             vr.collectables.append(collect.Energy(Vector(450, 200), respawn_time=3))
             vr.collectables.append(collect.Orb(Vector(450, 300)))

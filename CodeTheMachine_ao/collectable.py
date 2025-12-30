@@ -34,11 +34,11 @@ class Collectable:
         return self.position.x - self.size.x/2 <= point.x <= self.position.x + self.size.x/2 and self.position.y - self.size.y/2 <= point.y <= self.position.y + self.size.y/2
 
 class Energy(Collectable):
-    def __init__(self, position: Vector, respawn_time=-1):
+    def __init__(self, position, respawn_time=-1):
         super().__init__()
         self.type_name = "Energy"
         self.size = Vector(*cf.collectables_base_size)
-        self.position = position
+        self.position = position if isinstance(position, Vector) else Vector(*position)
         self.visual = visuals.resize(visuals.energy, self.size)
 
         self.respawn_time = respawn_time
@@ -54,20 +54,20 @@ class Energy(Collectable):
             self.setCollected(False)
 
 class Orb(Collectable):
-    def __init__(self, position: Vector, collected=False):
+    def __init__(self, position, collected=False):
         super().__init__()
         self.setCollected(collected)
         self.type_name = "Orb"
         self.size = Vector(*cf.collectables_base_size)
-        self.position = position
+        self.position = position if isinstance(position, Vector) else Vector(*position)
         self.visual = visuals.resize(visuals.orb, self.size)
 
 class Timer(Collectable):
-    def __init__(self, position: Vector, duration: float, reset_score=True):
+    def __init__(self, position, duration: float, reset_score=True):
         super().__init__()
         self.type_name = "timer"
         self.size = Vector(*cf.collectables_base_size)
-        self.position = position
+        self.position = position if isinstance(position, Vector) else Vector(*position)
         self.visual = visuals.resize(visuals.orb, self.size)
 
         self.duration = duration
