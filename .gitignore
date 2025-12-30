@@ -1,0 +1,6 @@
+**/__pycache__/
+.DS_Store
+.idea/*
+CodeTheMachine_ao/.DS_Store
+Drone_Activité/Activité.pages
+tests/*
